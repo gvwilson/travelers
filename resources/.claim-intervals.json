@@ -1,0 +1,12 @@
+{
+  "intervals": [
+    {
+      "atMs": 1792115394235,
+      "ids": [],
+      "kind": "cleared",
+      "ref": "refs/bram/claims/1792115394235",
+      "tree": "a5b1ea4ce95cd74d20c4b0c1c5c4d4de63065c8d"
+    }
+  ],
+  "version": 1
+}
