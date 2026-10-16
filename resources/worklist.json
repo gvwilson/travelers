@@ -1,0 +1,14 @@
+{
+  "description": "",
+  "items": [
+    {
+      "begunAtMs": 1792111313519,
+      "files": [
+        "PLAN.md"
+      ],
+      "id": "implementation-plan",
+      "status": "applied"
+    }
+  ],
+  "version": 3
+}

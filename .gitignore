@@ -1,0 +1,5 @@
+*~
+.DS_Store
+.codewhale/
+node_modules/
+resources/bram-traces/

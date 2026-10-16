@@ -1,0 +1,17 @@
+{
+  "description": "",
+  "items": [
+    {
+      "_citationsMissing": true,
+      "after": "Create `PLAN.md` capturing the implementation roadmap so it survives across\nsessions and is the source of truth for sequencing. It will contain:\n\n- **Engine:** KAPLAY (formerly Kaboom.js), loaded via a pinned CDN for now (no\n  vendored copy — avoids committing a large opaque minified blob; npm + bundler\n  deferred to the later packaging step, per the README).\n- **Design assumptions:**\n  - Grid-based, one-way path movement: the map is a one-cell-wide directed path\n    network; travelers move in one direction through each cell (splits branch),\n    modeled as a DAG of entry → split/join → exit.\n  - Continuous time (`onUpdate` + per-kind move intervals), as in `../humans`.\n  - All tunables centralized in one config object (speeds, energy costs, point\n    values, tower costs, danger rates) for easy playtesting.\n  - Single `index.html` loads all JS files as ES modules; no bundler.\n  - Circled-character rendering for every entity (graphics later).\n- **Domain model:** 5 traveler kinds (pilgrim, merchant, refugee, postman,\n  tourist), 3 towers (hostel, engineer, guard), 6 dangers (wild animals, bandits,\n  floods, collapsed bridges, plagues, hunger).\n- **Nine worklist items** in dependency order, each with a one-line goal and a\n  \"done when\" acceptance check:\n\n1. `scaffold-engine` — single `index.html` + KAPLAY + empty game loop + blank canvas.\n2. `map-path-generator` — grid/cell classes, random directed path network (fully connected, splits/joins, entries reach exits), connectivity check, directional rendering.\n3. `traveler-classes` — `Traveler` base + 5 kinds, spawn at entries, move one-way along the path (branch at splits), circled-letter rendering.\n4. `traveler-energy` — some kinds spend energy per step; low energy slows, zero expires.\n5. `points-economy` — start with points, earn on exit, HUD.\n6. `tower-building` — `Tower` base + hostel/engineer/guard, fixed build sites, click to build (spend points).\n7. `tower-effects` — hostel refreshes energy, engineer repairs, guard fends off.\n8. `danger-system` — danger classes (mobile/static/status), spawning, effects on travelers, tower counters.\n9. `endgame-tuning` — win/lose, score, restart, centralize tunables.",
+      "before": "No implementation plan exists. `README.md` describes \"Travelers\" at a high level\n(a tower-defense-shaped game where the player helps travelers reach their\ndestination), but there is no breakdown into discrete, independently-implementable\nsteps. Development will span multiple sessions, one worklist item at a time.\n\nThe sibling project `../humans` (\"Save the Humans!\") used the same engine and\nworkflow: a `PLAN.md` roadmap plus one worklist item per step, implemented in\n`src/main.js`, `src/map.js`, `src/actors.js`, and `src/config.js`. Its structure\nand idioms are the reference for this project.",
+      "citations": [],
+      "files": [
+        "PLAN.md"
+      ],
+      "id": "implementation-plan",
+      "status": "proposed"
+    }
+  ],
+  "version": 1
+}
