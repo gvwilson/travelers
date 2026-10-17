@@ -1,11 +1,52 @@
 {
   "intervals": [
     {
-      "atMs": 1792115394235,
+      "atMs": 1792262160241,
+      "ids": [
+        "map-path-generator"
+      ],
+      "kind": "approved",
+      "ref": "refs/bram/claims/1792262160241",
+      "tree": "56248c350c4ee90542a48ec24a770ee81cb68c12"
+    },
+    {
+      "atMs": 1792262636170,
       "ids": [],
       "kind": "cleared",
-      "ref": "refs/bram/claims/1792115394235",
-      "tree": "a5b1ea4ce95cd74d20c4b0c1c5c4d4de63065c8d"
+      "ref": "refs/bram/claims/1792262636170",
+      "tree": "c1c51fdb1e5bda64333c9f399265ed9f21b5cbea"
+    },
+    {
+      "atMs": 1792269149673,
+      "ids": [
+        "map-path-simplify"
+      ],
+      "kind": "approved",
+      "ref": "refs/bram/claims/1792269149673",
+      "tree": "cf1a2d961c3ee088146dc24d8006fc4d205b4e44"
+    },
+    {
+      "atMs": 1792269288531,
+      "ids": [],
+      "kind": "cleared",
+      "ref": "refs/bram/claims/1792269288531",
+      "tree": "29e986e35ba9f14d7cbb8b2d3ff2ec94f52a0849"
+    },
+    {
+      "atMs": 1792269432200,
+      "ids": [
+        "map-path-simplify"
+      ],
+      "kind": "iterate",
+      "ref": "refs/bram/claims/1792269432200",
+      "tree": "c42883581f5589b6c1e6662258cd2c62b82187f4"
+    },
+    {
+      "atMs": 1792269712889,
+      "ids": [],
+      "kind": "cleared",
+      "ref": "refs/bram/claims/1792269712889",
+      "tree": "eee3573939355fe4e474672c778fccf406b05571"
     }
   ],
   "version": 1

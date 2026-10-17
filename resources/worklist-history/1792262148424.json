@@ -1,0 +1,18 @@
+{
+  "description": "",
+  "items": [
+    {
+      "_citationsMissing": true,
+      "after": "Add `src/map.js` and teach `src/main.js` to render it:\n\n- `src/map.js`\n  - `CellType` enum: `ENTRY`, `PATH`, `SPLIT`, `EXIT`, `EMPTY`, `BUILD_SITE`.\n  - `GRID_ROWS`, `GRID_COLS`, `CELL_SIZE` (mirror `../humans`: 15×21, 32px).\n  - `generateMap(rows, cols)` — builds a one-cell-wide *directed* path network\n    flowing left→right, so acyclicity is guaranteed by construction (every edge\n    increases the column index). One `ENTRY` on the left; random splits (a cell\n    fans out to 1–3 cells in the next column) and joins (two branches target\n    the same cell); rightmost path cells become `EXIT`. Returns\n    `{ grid, next, entries, exits }` where `next[r][c]` lists each path cell's\n    directed `[nr, nc]` targets.\n  - `verifyMap(map)` — runs the four invariants (every entry reaches an exit;\n    every path cell reachable from an entry; every path cell reaches an exit;\n    acyclic) and returns a boolean.\n- `src/main.js` — render each cell with a color per type, and draw a short line\n  from each path cell's center toward each of its `next` cells so direction\n  (and splits) are visible. Entry and exit use distinct colors.\n\nNot in this step (deferred per the roadmap): build-site placement (item 6),\n`src/config.js` (no tunable values yet), traveler movement (item 3).\n\n*Done when:* every generated map passes `verifyMap` and the browser shows the\ndirected path with direction visible.",
+      "before": "`src/main.js` boots KAPLAY and draws a blank 640×480 canvas; `src/map.js`\ndoes not exist. There is no grid, no path, no direction — nothing on the map\nyet. This is roadmap item 2 from `PLAN.md`.",
+      "citations": [],
+      "files": [
+        "src/map.js",
+        "src/main.js"
+      ],
+      "id": "map-path-generator",
+      "status": "proposed"
+    }
+  ],
+  "version": 8
+}

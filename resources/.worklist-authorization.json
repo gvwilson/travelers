@@ -1,26 +1,26 @@
 {
   "kind": "approved",
   "ids": [
-    "scaffold-engine"
+    "map-path-simplify"
   ],
   "items": [
     {
       "_citationsMissing": true,
-      "after": "Create the minimal static-site scaffold that boots KAPLAY:\n\n- `index.html` — a single HTML page that loads `src/main.js` as an ES module\n  (no build step, per the README).\n- `src/main.js` — imports KAPLAY from the pinned CDN (matching `../humans`) and\n  initializes a blank canvas via `kaplay({...})`.\n\n*Done when:* the page opens showing a blank canvas with no console errors.",
-      "before": "No source files exist. The project has `README.md`, `PLAN.md`, and build/lint\nconfig, but no `index.html` or `src/`. KAPLAY is not yet wired up, so nothing\nruns in the browser. This is roadmap item 1 from `PLAN.md`.",
+      "after": "`src/map.js` generates one non-branching path:\n\n- exactly one `ENTRY` cell on the left edge and one `EXIT` cell on the right edge;\n- one path cell per column, each column stepping up, straight, or down\n  (`-1`/`0`/`+1` rows), so the path winds without branching or joining;\n- no two path cells are orthogonally adjacent unless one is the next cell after\n  the other — the path never runs alongside itself.\n\n`verifyMap` adds a fifth invariant encoding that adjacency rule. `shuffle` and\n`pickDistinct` are removed as unused. `PLAN.md` updates the invariants list\n(adds the rule) and the \"Generation\" bullet. The `SPLIT` cell type stays in the\nenum for the later branching roadmap item but is not produced yet.",
+      "before": "`src/map.js` fans the path out from 1–2 entries and funnels it into 1–2 exits,\nwith `SPLIT` cells wherever a cell has several next-cells. The result puts\nparallel strands side by side — two path cells that touch but are not\nconnected — so the trail reads as a 2+-cell-wide road and leaves no clean\nmargin for build sites. The `PLAN.md` \"Generation\" bullet documents the 1-or-2\nentry/exit split.",
       "citations": [],
       "feedback": "",
       "files": [
-        "index.html",
-        "src/main.js"
+        "src/map.js",
+        "PLAN.md"
       ],
-      "id": "scaffold-engine",
+      "id": "map-path-simplify",
       "status": "proposed"
     }
   ],
-  "issuedAtMs": 1792115311487,
+  "issuedAtMs": 1792269149672,
   "source": "worklist-action-command",
-  "consumedAtMs": 1792115394288,
+  "consumedAtMs": 1792269288582,
   "interruptedAtMs": null,
-  "commitToo": true
+  "commitToo": false
 }

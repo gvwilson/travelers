@@ -1,0 +1,1 @@
+revise the algorithm: path squares must connect orthogonally, not diagonally. modify it again: the path must never occupy border squares - only the entry and exit cells may be on the border of the grid.

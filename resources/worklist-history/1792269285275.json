@@ -1,0 +1,19 @@
+{
+  "description": "",
+  "items": [
+    {
+      "_citationsMissing": true,
+      "after": "`src/map.js` generates one non-branching path:\n\n- exactly one `ENTRY` cell on the left edge and one `EXIT` cell on the right edge;\n- one path cell per column, each column stepping up, straight, or down\n  (`-1`/`0`/`+1` rows), so the path winds without branching or joining;\n- no two path cells are orthogonally adjacent unless one is the next cell after\n  the other — the path never runs alongside itself.\n\n`verifyMap` adds a fifth invariant encoding that adjacency rule. `shuffle` and\n`pickDistinct` are removed as unused. `PLAN.md` updates the invariants list\n(adds the rule) and the \"Generation\" bullet. The `SPLIT` cell type stays in the\nenum for the later branching roadmap item but is not produced yet.",
+      "before": "`src/map.js` fans the path out from 1–2 entries and funnels it into 1–2 exits,\nwith `SPLIT` cells wherever a cell has several next-cells. The result puts\nparallel strands side by side — two path cells that touch but are not\nconnected — so the trail reads as a 2+-cell-wide road and leaves no clean\nmargin for build sites. The `PLAN.md` \"Generation\" bullet documents the 1-or-2\nentry/exit split.",
+      "begunAtMs": 1792269149673,
+      "citations": [],
+      "files": [
+        "src/map.js",
+        "PLAN.md"
+      ],
+      "id": "map-path-simplify",
+      "status": "proposed"
+    }
+  ],
+  "version": 13
+}

@@ -1,0 +1,1 @@
+do not generate images to check the generated maps: write a JavaScript test to check the properties of the generated map.
