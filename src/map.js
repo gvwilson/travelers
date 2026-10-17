@@ -11,87 +11,74 @@ export const GRID_ROWS = 15;
 export const GRID_COLS = 21;
 export const CELL_SIZE = 32;
 
-function shuffle(list) {
-  const out = list.slice();
-  for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [out[i], out[j]] = [out[j], out[i]];
-  }
-  return out;
-}
-
-function pickDistinct(n, max) {
-  const pool = Array.from({ length: max }, (_, i) => i);
-  shuffle(pool);
-  return pool.slice(0, n);
-}
+const VERTICAL_STEP_CHANCE = 0.6; // bias toward winding over straight runs
 
 export function generateMap(rows = GRID_ROWS, cols = GRID_COLS) {
-  for (let attempt = 0; attempt < 100; attempt++) {
-    const map = buildMap(rows, cols);
-    if (verifyMap(map)) return map;
-  }
-  throw new Error('map generation failed to satisfy the invariants');
+  return buildMap(rows, cols);
 }
 
-// Builds a directed path network flowing left→right, so acyclicity holds by
-// construction: every edge moves to a strictly higher column index. The
-// network fans out from 1–2 entries and funnels into 1–2 exits.
+// Single non-branching path: monotone in columns (never left), so it is acyclic
+// and can never get stuck — a right step is always available. A vertical step
+// is taken only when the target cell is clear of every earlier cell but its
+// predecessor, which keeps the path from running alongside itself.
 function buildMap(rows, cols) {
   const grid = Array.from({ length: rows }, () => new Array(cols).fill(CellType.EMPTY));
   const next = Array.from({ length: rows }, () =>
     Array.from({ length: cols }, () => []),
   );
+  const visited = Array.from({ length: rows }, () => new Array(cols).fill(false));
 
-  const entryRows = pickDistinct(Math.random() < 0.5 ? 1 : 2, rows);
-  const exitRows = pickDistinct(Math.random() < 0.5 ? 1 : 2, rows);
+  const isClear = (r, c, fromR, fromC) => {
+    for (const [dr, dc] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+      const nr = r + dr;
+      const nc = c + dc;
+      if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+      if (nr === fromR && nc === fromC) continue;
+      if (visited[nr][nc]) return false;
+    }
+    return true;
+  };
 
-  for (const r of entryRows) grid[r][0] = CellType.ENTRY;
-  for (const r of exitRows) grid[r][cols - 1] = CellType.EXIT;
+  // Interior rows only (1..rows-2): the top and bottom borders stay empty.
+  let r = 1 + Math.floor(Math.random() * (rows - 2));
+  let c = 0;
+  const cells = [[r, c]];
+  visited[r][c] = true;
 
-  for (let c = 0; c < cols - 1; c++) {
-    for (let r = 0; r < rows; r++) {
-      const type = grid[r][c];
-      if (type !== CellType.ENTRY && type !== CellType.PATH && type !== CellType.SPLIT) {
-        continue;
-      }
-      if (c + 1 === cols - 1) {
-        for (const er of exitRows) {
-          next[r][c].push([er, cols - 1]);
-        }
-        continue;
-      }
-      const candidates = [r - 1, r, r + 1].filter((nr) => nr >= 0 && nr < rows);
-      const targetCount = 1 + Math.floor(Math.random() * candidates.length);
-      for (const nr of shuffle(candidates).slice(0, targetCount)) {
-        next[r][c].push([nr, c + 1]);
-        if (grid[nr][c + 1] === CellType.EMPTY) {
-          grid[nr][c + 1] = CellType.PATH;
-        }
+  while (c < cols - 1) {
+    if (c > 0) {
+      const steps = [];
+      if (r - 1 >= 1 && !visited[r - 1][c] && isClear(r - 1, c, r, c)) steps.push(r - 1);
+      if (r + 1 <= rows - 2 && !visited[r + 1][c] && isClear(r + 1, c, r, c)) steps.push(r + 1);
+      if (steps.length > 0 && Math.random() < VERTICAL_STEP_CHANCE) {
+        r = steps[Math.floor(Math.random() * steps.length)];
+        visited[r][c] = true;
+        cells.push([r, c]);
       }
     }
+    c += 1;
+    visited[r][c] = true;
+    cells.push([r, c]);
   }
 
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols - 1; c++) {
-      if (grid[r][c] === CellType.PATH && next[r][c].length > 1) {
-        grid[r][c] = CellType.SPLIT;
-      }
-    }
+  for (let i = 0; i < cells.length; i++) {
+    const [rr, cc] = cells[i];
+    grid[rr][cc] =
+      i === 0 ? CellType.ENTRY : i === cells.length - 1 ? CellType.EXIT : CellType.PATH;
+    if (i < cells.length - 1) next[rr][cc].push(cells[i + 1]);
   }
 
-  const entries = [];
-  const exits = [];
-  for (let r = 0; r < rows; r++) {
-    if (grid[r][0] === CellType.ENTRY) entries.push([r, 0]);
-    if (grid[r][cols - 1] === CellType.EXIT) exits.push([r, cols - 1]);
-  }
-
-  return { grid, next, entries, exits };
+  return {
+    grid,
+    next,
+    entries: [cells[0]],
+    exits: [cells[cells.length - 1]],
+  };
 }
 
-// Verifies the four map invariants from PLAN.md. Returns true only when all
-// hold; generateMap re-rolls (up to a bounded number of attempts) on failure.
+// Verifies the five map invariants from PLAN.md: every entry reaches an exit,
+// every path cell is reachable from an entry and reaches an exit, the graph is
+// acyclic, and no two path cells are adjacent unless one follows the other.
 export function verifyMap(map) {
   const { grid, next, entries, exits } = map;
   const rows = grid.length;
@@ -169,6 +156,21 @@ export function verifyMap(map) {
   };
   for (const [r, c] of nodes) {
     if ((color.get(key(r, c)) ?? WHITE) === WHITE && !visit(r, c)) return false;
+  }
+
+  // Invariant 5: no two path cells share an edge unless one is the other's
+  // next cell — the path never runs alongside itself.
+  for (const [r, c] of nodes) {
+    for (const [dr, dc] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+      const nr = r + dr;
+      const nc = c + dc;
+      if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) continue;
+      if (!isNode(nr, nc)) continue;
+      const linked =
+        next[r][c].some(([er, ec]) => er === nr && ec === nc) ||
+        next[nr][nc].some(([er, ec]) => er === r && ec === c);
+      if (!linked) return false;
+    }
   }
 
   return true;

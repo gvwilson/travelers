@@ -91,12 +91,14 @@ station heals; Hostel handles energy, Engineer repairs, Guard fends off.
   1. every `ENTRY` reaches at least one `EXIT`;
   2. every path cell is reachable from some `ENTRY`;
   3. every path cell reaches some `EXIT`;
-  4. the path graph is acyclic.
-- **Generation:** a random generator builds a one-cell-wide directed path
-  network with splits and joins, then a connectivity check rejects/re-generates
-  any map that breaks the invariants. Reloading the page generates a new map.
-  Each map has one or two `ENTRY` cells (chosen 50/50) and, independently, one
-  or two `EXIT` cells (chosen 50/50); never more than two of either.
+  4. the path graph is acyclic;
+  5. no two path cells are adjacent unless one is the next cell after the other.
+- **Generation:** a random generator builds a single winding path from one
+  `ENTRY` cell on the left edge to one `EXIT` cell on the right edge. Consecutive
+  cells connect orthogonally (edge-to-edge, never corner-to-corner). Only the
+  `ENTRY` and `EXIT` cells sit on the grid border; every other cell stays at
+  least one row/column away from it. Reloading the page generates a new map.
+  The path never branches, joins, backtracks, or runs alongside itself.
 
 ## Placing towers
 
@@ -121,9 +123,9 @@ session, in dependency order.
    *Done when:* the page opens showing an empty grid with no console errors.
 
 2. **`map-path-generator`** — grid/cell classes (`ENTRY`, `PATH`, `SPLIT`,
-   `EXIT`, `EMPTY`, `BUILD_SITE`), random directed path network, connectivity
-   check, directional rendering.
-   *Done when:* every generated map satisfies the four invariants and renders
+   `EXIT`, `EMPTY`, `BUILD_SITE`), random directed path, connectivity check,
+   directional rendering.
+   *Done when:* every generated map satisfies the five invariants and renders
    with direction visible.
 
 3. **`traveler-classes`** — `Traveler` base + `Pilgrim`/`Merchant`/`Refugee`/
