@@ -95,6 +95,8 @@ station heals; Hostel handles energy, Engineer repairs, Guard fends off.
 - **Generation:** a random generator builds a one-cell-wide directed path
   network with splits and joins, then a connectivity check rejects/re-generates
   any map that breaks the invariants. Reloading the page generates a new map.
+  Each map has one or two `ENTRY` cells (chosen 50/50) and, independently, one
+  or two `EXIT` cells (chosen 50/50); never more than two of either.
 
 ## Placing towers
 
