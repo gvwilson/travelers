@@ -129,7 +129,7 @@ session, in dependency order.
    with direction visible.
 
 3. **`traveler-classes`** — `Traveler` base + `Pilgrim`/`Merchant`/`Refugee`/
-   `Postman`/`Tourist`, spawn at entry cells, move one-way along the path
+   `Courier`/`Tourist`, spawn at entry cells, move one-way along the path
    (branching at splits), circled-letter rendering.
    *Done when:* travelers appear at entries and flow toward exits along the
    directed path.
