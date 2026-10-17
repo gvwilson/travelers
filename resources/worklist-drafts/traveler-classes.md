@@ -1,0 +1,18 @@
+# Before
+
+No traveler entity exists yet. `src/main.js` generates a map and draws the grid
+with a direction overlay, then stops. The path is a single non-branching route
+(one entry, one exit), so each traveler has at most one `next` cell to follow.
+
+# After
+
+- `src/actors.js` (new) — a `TRAVELER_KINDS` table and a `Traveler` class with
+  five kinds from the domain model: Courier `C` (fast), Merchant `M` (energy,
+  worth more), Pilgrim `P` (baseline), Refugee `R` (energy, fragile), Tourist
+  `T` (slow). Each carries a letter glyph and a speed (px/s). (The roadmap
+  item text says "Postman"; the domain model calls it "Courier", which I use.)
+- `src/main.js` — spawn travelers at the entry cell, move each cell-to-cell
+  along `next` in `onUpdate`, render each as a circle with its letter, remove
+  it at the exit. No branching — the single path has no splits.
+
+Does not touch `src/map.js` or `test/map.test.js`.

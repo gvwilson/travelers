@@ -1,0 +1,18 @@
+{
+  "description": "",
+  "items": [
+    {
+      "_citationsMissing": true,
+      "after": "- `src/actors.js` (new) — a `TRAVELER_KINDS` table and a `Traveler` class with\n  five kinds from the domain model: Courier `C` (fast), Merchant `M` (energy,\n  worth more), Pilgrim `P` (baseline), Refugee `R` (energy, fragile), Tourist\n  `T` (slow). Each carries a letter glyph and a speed (px/s). (The roadmap\n  item text says \"Postman\"; the domain model calls it \"Courier\", which I use.)\n- `src/main.js` — spawn travelers at the entry cell, move each cell-to-cell\n  along `next` in `onUpdate`, render each as a circle with its letter, remove\n  it at the exit. No branching — the single path has no splits.\n\nDoes not touch `src/map.js` or `test/map.test.js`.",
+      "before": "No traveler entity exists yet. `src/main.js` generates a map and draws the grid\nwith a direction overlay, then stops. The path is a single non-branching route\n(one entry, one exit), so each traveler has at most one `next` cell to follow.",
+      "citations": [],
+      "files": [
+        "src/actors.js",
+        "src/main.js"
+      ],
+      "id": "traveler-classes",
+      "status": "proposed"
+    }
+  ],
+  "version": 17
+}

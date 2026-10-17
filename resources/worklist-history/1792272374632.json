@@ -1,0 +1,17 @@
+{
+  "description": "",
+  "items": [
+    {
+      "_citationsMissing": true,
+      "after": "`PLAN.md` roadmap item 3 reads \"Courier\" (`Courier`/`Tourist`) to match the\ndomain model. \"Branching at splits\" is left unchanged — the map generator will\nregain splits and joins in a later step.",
+      "before": "`PLAN.md` roadmap item 3 names the fast traveler \"Postman\", but the domain model\ntable above it names the same kind \"Courier\" (letter `C`). `src/actors.js`\nalready uses \"courier\".",
+      "citations": [],
+      "files": [
+        "PLAN.md"
+      ],
+      "id": "courier-naming",
+      "status": "proposed"
+    }
+  ],
+  "version": 21
+}

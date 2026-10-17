@@ -1,0 +1,32 @@
+{
+  "description": "",
+  "items": [
+    {
+      "_citationsMissing": true,
+      "after": "`src/map.js` generates one non-branching path:\n\n- exactly one `ENTRY` cell on the left edge and one `EXIT` cell on the right edge;\n- consecutive cells connect orthogonally (edge-to-edge, never corner-to-corner);\n- only the `ENTRY` and `EXIT` cells sit on the grid border — every interior cell\n  stays at least one cell away from it;\n- no two path cells are orthogonally adjacent unless one is the next cell after\n  the other — the path never runs alongside itself.\n\n`verifyMap` adds a fifth invariant encoding that adjacency rule. `shuffle` and\n`pickDistinct` are removed as unused. `PLAN.md` updates the invariants list\n(adds the rule) and the \"Generation\" bullet. A `test/map.test.js` property test\nasserts a single entry/exit, orthogonal step-by-step connectivity, off-border\ninterior cells, and that every generated map satisfies the five invariants. The\n`SPLIT` cell type stays in the enum for the later branching roadmap item but is\nnot produced yet.",
+      "before": "`src/map.js` fans the path out from 1–2 entries and funnels it into 1–2 exits,\nwith `SPLIT` cells wherever a cell has several next-cells. The result puts\nparallel strands side by side — two path cells that touch but are not\nconnected — so the trail reads as a 2+-cell-wide road and leaves no clean\nmargin for build sites. The `PLAN.md` \"Generation\" bullet documents the 1-or-2\nentry/exit split.",
+      "begunAtMs": 1792269149673,
+      "citations": [],
+      "files": [
+        "src/map.js",
+        "PLAN.md",
+        "test/map.test.js"
+      ],
+      "id": "map-path-simplify",
+      "status": "applied"
+    },
+    {
+      "_citationsMissing": true,
+      "after": "- `src/actors.js` (new) — a `TRAVELER_KINDS` table and a `Traveler` class with\n  five kinds from the domain model: Courier `C` (fast), Merchant `M` (energy,\n  worth more), Pilgrim `P` (baseline), Refugee `R` (energy, fragile), Tourist\n  `T` (slow). Each carries a letter glyph and a speed (px/s). (The roadmap\n  item text says \"Postman\"; the domain model calls it \"Courier\", which I use.)\n- `src/main.js` — spawn travelers at the entry cell, move each cell-to-cell\n  along `next` in `onUpdate`, render each as a circle with its letter, remove\n  it at the exit. No branching — the single path has no splits.\n\nDoes not touch `src/map.js` or `test/map.test.js`.",
+      "before": "No traveler entity exists yet. `src/main.js` generates a map and draws the grid\nwith a direction overlay, then stops. The path is a single non-branching route\n(one entry, one exit), so each traveler has at most one `next` cell to follow.",
+      "citations": [],
+      "files": [
+        "src/actors.js",
+        "src/main.js"
+      ],
+      "id": "traveler-classes",
+      "status": "proposed"
+    }
+  ],
+  "version": 16
+}

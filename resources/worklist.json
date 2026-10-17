@@ -1,16 +1,5 @@
 {
   "description": "",
-  "items": [
-    {
-      "begunAtMs": 1792269149673,
-      "files": [
-        "src/map.js",
-        "PLAN.md",
-        "test/map.test.js"
-      ],
-      "id": "map-path-simplify",
-      "status": "applied"
-    }
-  ],
-  "version": 15
+  "items": [],
+  "version": 23
 }
