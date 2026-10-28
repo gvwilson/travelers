@@ -1,15 +1,30 @@
 import kaplay from 'https://unpkg.com/kaplay@3001.0.19/dist/kaplay.mjs';
-import { generateMap, CellType, GRID_ROWS, GRID_COLS, CELL_SIZE } from './map.js';
+import { generateMap, MAPS, CellType, GRID_ROWS, GRID_COLS, CELL_SIZE } from './map.js';
 import { Traveler, TRAVELER_KIND_NAMES } from './actors.js';
 
-const { add, rect, pos, color, circle, outline, anchor, text, vec2, polygon, onUpdate, dt } =
+const { add, rect, pos, color, circle, outline, anchor, text, vec2, onUpdate, dt } =
   kaplay({
     background: '#1a1a1a',
     width: GRID_COLS * CELL_SIZE,
     height: GRID_ROWS * CELL_SIZE,
   });
 
-const { grid, next, entries } = generateMap();
+function readMapIndex() {
+  const raw = new URLSearchParams(window.location.search).get('map');
+  const n = Number.parseInt(raw ?? '0', 10);
+  return Number.isInteger(n) && n >= 0 && n < MAPS.length ? n : 0;
+}
+
+const mapIndex = readMapIndex();
+const { grid, next, entries } = generateMap(mapIndex);
+
+const mapSelect = document.getElementById('map-select');
+if (mapSelect) {
+  mapSelect.value = String(mapIndex);
+  mapSelect.addEventListener('change', () => {
+    window.location.search = `?map=${mapSelect.value}`;
+  });
+}
 
 const CELL_COLORS = {
   [CellType.ENTRY]: '#29b6f6',
@@ -34,52 +49,6 @@ function cellCenter(r, c) {
   return { x: c * CELL_SIZE + CELL_SIZE / 2, y: r * CELL_SIZE + CELL_SIZE / 2 };
 }
 
-// Direction overlay: a thin edge plus an arrowhead, both in pixels.
-const DIRECTION_COLOR = '#ffffff';
-const EDGE_THICKNESS = 1;
-const ARROW_LEN = 6;
-const ARROW_HALF = 3;
-
-function drawEdge(from, to) {
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
-  const length = Math.hypot(dx, dy);
-  if (length === 0) return;
-  const ux = dx / length;
-  const uy = dy / length;
-  const px = -uy * EDGE_THICKNESS;
-  const py = ux * EDGE_THICKNESS;
-  const ax = -uy * ARROW_HALF;
-  const ay = ux * ARROW_HALF;
-
-  add([
-    polygon([
-      vec2(from.x + px, from.y + py),
-      vec2(from.x - px, from.y - py),
-      vec2(to.x - px, to.y - py),
-      vec2(to.x + px, to.y + py),
-    ]),
-    color(DIRECTION_COLOR),
-  ]);
-
-  add([
-    polygon([
-      vec2(to.x, to.y),
-      vec2(to.x - ux * ARROW_LEN + ax, to.y - uy * ARROW_LEN + ay),
-      vec2(to.x - ux * ARROW_LEN - ax, to.y - uy * ARROW_LEN - ay),
-    ]),
-    color(DIRECTION_COLOR),
-  ]);
-}
-
-for (let r = 0; r < GRID_ROWS; r++) {
-  for (let c = 0; c < GRID_COLS; c++) {
-    for (const [nr, nc] of next[r][c]) {
-      drawEdge(cellCenter(r, c), cellCenter(nr, nc));
-    }
-  }
-}
-
 const TRAVELER_RADIUS = CELL_SIZE / 2 - 4; // inset so circles sit inside their cells
 const TRAVELER_TEXT_SIZE = CELL_SIZE / 2;
 const SPAWN_INTERVAL = 1; // seconds between traveler spawns
@@ -88,7 +57,8 @@ const travelers = [];
 
 function spawnTraveler() {
   const kind = TRAVELER_KIND_NAMES[Math.floor(Math.random() * TRAVELER_KIND_NAMES.length)];
-  const traveler = new Traveler(kind, entries[0]);
+  const entry = entries[Math.floor(Math.random() * entries.length)];
+  const traveler = new Traveler(kind, entry);
   const { x, y } = cellCenter(traveler.r, traveler.c);
   traveler.sprites = [
     add([

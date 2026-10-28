@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {
+  MAPS,
   generateMap,
   verifyMap,
   CellType,
@@ -7,63 +8,38 @@ import {
   GRID_COLS,
 } from '../src/map.js';
 
-const ITERATIONS = 10000;
-const isNode = (type) =>
-  type === CellType.ENTRY ||
-  type === CellType.PATH ||
-  type === CellType.SPLIT ||
-  type === CellType.EXIT;
+const SPECS = [
+  { entries: [[7, 0]], exits: [[4, 20]] },
+  { entries: [[4, 0], [10, 0]], exits: [[7, 20]] },
+  { entries: [[7, 0], [0, 10]], exits: [[7, 20]] },
+  { entries: [[7, 0]], exits: [[7, 20]] },
+  { entries: [[7, 0]], exits: [[4, 20], [10, 20]] },
+];
 
-function walkPath(map) {
-  const { next, entries } = map;
-  const cells = [];
-  const seen = new Set();
-  let [r, c] = entries[0];
-  while (true) {
-    const k = r * GRID_COLS + c;
-    assert.ok(!seen.has(k), 'path must not revisit a cell');
-    seen.add(k);
-    cells.push([r, c]);
-    const out = next[r][c];
-    if (out.length === 0) break;
-    [r, c] = out[0];
-  }
-  return cells;
-}
+assert.equal(MAPS.length, 5, 'five static maps');
 
-for (let i = 0; i < ITERATIONS; i++) {
-  const map = generateMap();
+MAPS.forEach((map, i) => {
   const { grid, entries, exits } = map;
 
-  assert.equal(entries.length, 1, `map ${i}: one entry`);
-  assert.equal(exits.length, 1, `map ${i}: one exit`);
-  assert.equal(entries[0][1], 0, `map ${i}: entry on left edge`);
-  assert.equal(exits[0][1], GRID_COLS - 1, `map ${i}: exit on right edge`);
-
-  const cells = walkPath(map);
-
-  let nodeCount = 0;
-  for (let r = 0; r < GRID_ROWS; r++)
-    for (let c = 0; c < GRID_COLS; c++) if (isNode(grid[r][c])) nodeCount++;
-  assert.equal(cells.length, nodeCount, `map ${i}: one simple path through all cells`);
-  assert.deepEqual(cells[cells.length - 1], exits[0], `map ${i}: path ends at exit`);
-
-  const entryKey = `${entries[0][0]},${entries[0][1]}`;
-  const exitKey = `${exits[0][0]},${exits[0][1]}`;
-  for (const [r, c] of cells) {
-    const key = `${r},${c}`;
-    if (key === entryKey || key === exitKey) continue;
-    assert.ok(r >= 1 && r <= GRID_ROWS - 2, `map ${i}: interior row off border`);
-    assert.ok(c >= 1 && c <= GRID_COLS - 2, `map ${i}: interior column off border`);
-  }
-
-  for (let j = 1; j < cells.length; j++) {
-    const [pr, pc] = cells[j - 1];
-    const [r, c] = cells[j];
-    assert.equal(Math.abs(pr - r) + Math.abs(pc - c), 1, `map ${i}: orthogonal step`);
-  }
-
   assert.equal(verifyMap(map), true, `map ${i}: five invariants hold`);
+  assert.equal(grid.length, GRID_ROWS, `map ${i}: GRID_ROWS`);
+  assert.equal(grid[0].length, GRID_COLS, `map ${i}: GRID_COLS`);
+  assert.deepEqual(entries, SPECS[i].entries, `map ${i}: entries`);
+  assert.deepEqual(exits, SPECS[i].exits, `map ${i}: exits`);
+
+  for (const [r, c] of entries) {
+    assert.ok(r === 0 || c === 0, `map ${i}: entry ${r},${c} on left or top edge`);
+    assert.equal(grid[r][c], CellType.ENTRY, `map ${i}: entry cell type`);
+  }
+  for (const [r, c] of exits) {
+    assert.equal(c, GRID_COLS - 1, `map ${i}: exit ${r},${c} on right edge`);
+    assert.equal(grid[r][c], CellType.EXIT, `map ${i}: exit cell type`);
+  }
+});
+
+assert.equal(generateMap(), MAPS[0], 'generateMap() defaults to map 0');
+for (let i = 0; i < MAPS.length; i++) {
+  assert.equal(generateMap(i), MAPS[i], `generateMap(${i})`);
 }
 
-console.log(`ok: ${ITERATIONS} maps satisfy all properties`);
+console.log('ok: 5 static maps satisfy all properties');

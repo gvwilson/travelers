@@ -4,8 +4,63 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Travelers</title>
+    <style>
+      body {
+        margin: 0;
+        background: #1a1a1a;
+        color: #eee;
+        font-family: sans-serif;
+      }
+      #hud {
+        padding: 10px 14px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      #hud select {
+        margin-left: 8px;
+        font-size: 14px;
+      }
+      .legend {
+        margin-top: 8px;
+      }
+      .swatch {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 1px solid #666;
+        border-radius: 2px;
+        margin: 0 3px 0 8px;
+        vertical-align: -1px;
+      }
+    </style>
   </head>
   <body>
+    <div id="hud">
+      <label for="map-select">Map</label>
+      <select id="map-select">
+        <option value="0">1 — simple path</option>
+        <option value="1">2 — two entrances, join</option>
+        <option value="2">3 — left &amp; top, join</option>
+        <option value="3">4 — split then join</option>
+        <option value="4">5 — split to two exits</option>
+      </select>
+      <div class="legend">
+        Cells:
+        <span class="swatch" style="background:#29b6f6"></span>entry
+        <span class="swatch" style="background:#4a4a4a"></span>path
+        <span class="swatch" style="background:#ffa726"></span>split
+        <span class="swatch" style="background:#00e676"></span>exit
+        <span class="swatch" style="background:#000000"></span>background
+      </div>
+      <div class="legend">
+        Travelers:
+        <span class="swatch" style="background:#29b6f6"></span>C courier
+        <span class="swatch" style="background:#ffca28"></span>M merchant
+        <span class="swatch" style="background:#66bb6a"></span>P pilgrim
+        <span class="swatch" style="background:#ef5350"></span>R refugee
+        <span class="swatch" style="background:#ab47bc"></span>T tourist
+      </div>
+    </div>
     <script type="module" src="src/main.js"></script>
   </body>
 </html>
