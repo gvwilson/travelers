@@ -1,0 +1,35 @@
+{
+  "description": "",
+  "items": [
+    {
+      "_citationsMissing": true,
+      "after": "Replace the random generator with five hand-authored static maps and\nremove all random-generation code from `src/map.js`. Maps keep the same\n15×21 (`GRID_ROWS` × `GRID_COLS`) dimensions.\n\n## Data representation\n\nEach map is defined as an ordered list of **routes** — full walks from an\nentry to an exit — plus explicit `entries` / `exits`. A small builder\nturns each definition into the existing `{ grid, next, entries, exits }`\nshape:\n\n- `next` is built by linking each consecutive pair in each route,\n  deduplicating shared cells (so a join stays a single-outgoing `PATH`).\n- cell type is derived: `entries` → `ENTRY`, `exits` → `EXIT`, cells with\n  ≥2 outgoing edges → `SPLIT`, everything else on a route → `PATH`;\n  unvisited cells stay `EMPTY` (background).\n\nThis keeps `next` for traveler movement while the *visual* is cell-type\ncolors only — no arrows.\n\n## The five maps\n\nLegend: `E` entry, `.` path, `S` split, `X` exit, `␣` background. All\npaths are orthogonal (edge-to-edge), acyclic, and satisfy the existing\n`verifyMap` invariants (no two path cells adjacent unless linked).\n\n1. **simple-path** — one `E` on the left edge, one `X` on the right,\n   gentle up/down winding; every non-consecutive path cell pair is\n   separated by background.\n\n   `E (7,0) → … wind … → X (4,20)`\n\n2. **two-entrances-join** — two `E` on the left edge `(4,0)` and `(10,0)`,\n   two straight runs converge on a join near the middle `(7,10)`, one `X`\n   on the right `(7,20)`.\n\n3. **left-and-top-join** — one `E` on the left `(7,0)`, one on the top\n   `(0,10)`, join near the middle `(7,10)`, one `X` on the right `(7,20)`.\n\n4. **split-then-join** — one `E` on the left `(7,0)`, a `S` split at\n   ~⅓ across `(7,7)`, an upper and lower branch re-joining at ~⅔ across\n   `(7,14)`, one `X` on the right `(7,20)`.\n\n5. **split-to-two-exits** — one `E` on the left `(7,0)`, a `S` split\n   `(7,7)`, two branches ending in two `X` on the right edge `(4,20)` and\n   `(10,20)`.\n\n## API\n\n- Remove `VERTICAL_STEP_CHANCE` and `buildMap`.\n- Keep `CellType`, `GRID_ROWS`, `GRID_COLS`, `CELL_SIZE`, and `verifyMap`.\n- Add `export const MAPS` (five built maps).\n- Change `generateMap(index = 0)` to return `MAPS[index]` (breaking\n  change to the old `(rows, cols)` signature; call sites updated).\n\n`main.js` defaults to `generateMap()` → map 0. There is no level system\nyet, so the app shows one map; all five are exported and verified for a\nfuture level-selector. (If you'd rather the app cycle or pick a specific\nmap, say so and I'll wire that instead.)\n\n## Display & spawning\n\n- Delete the arrow overlay (`drawEdge`, arrowhead polygons, and the\n  `next`-drawing loop) from `main.js`, so maps render as colored\n  cells only — matching `../humans`.\n- `spawnTraveler` picks a random entry from `entries` so multi-entry maps\n  (2 and 3) use both entrances.\n\n## Tests\n\n- `test/map.test.js`: replace the 10,000-random-map loop with a check\n  over all five maps — `verifyMap` true, expected entry/exit counts, and\n  entries/exits on the correct edges.\n- `test/actors.test.js`: replace the 1,000-random-map loop with a check\n  over all five maps (each entry → reaches an exit).\n\n## Out of scope (noted, not changed)\n\n- `README.md` (\"random map generator\", \"reload to generate a new map\")\n  and `PLAN.md` (roadmap item 2 \"renders with direction visible\") become\n  stale; I'm leaving docs alone unless you want them updated.",
+      "before": "`src/map.js` generates a map at runtime: `generateMap()` → `buildMap()`\nbuilds one random single-path map (left `ENTRY` → right `EXIT`) using\n`Math.random` and a `VERTICAL_STEP_CHANCE` bias. The only exported\nselector is `generateMap(rows, cols)`, which always returns a freshly\nrandom map.\n\n`src/main.js` renders the map two ways:\n\n- colored cells for `ENTRY` / `PATH` / `SPLIT` / `EXIT` / `EMPTY` /\n  `BUILD_SITE`, **and**\n- a white arrow overlay (`drawEdge` + arrowhead polygons) drawn from the\n  `next` adjacency, showing the flow direction.\n\nTravelers spawn at `entries[0]` only.\n\n`test/map.test.js` runs 10,000 random maps through `verifyMap` and\nassorted single-path assertions. `test/actors.test.js` runs 1,000 random\nmaps asserting each traveler kind walks entry→exit.",
+      "begunAtMs": 1793206482801,
+      "citations": [],
+      "files": [
+        "src/map.js",
+        "src/main.js",
+        "test/map.test.js",
+        "test/actors.test.js",
+        "package-lock.json"
+      ],
+      "id": "static-maps-replace-random-generator",
+      "status": "applied"
+    },
+    {
+      "_citationsMissing": true,
+      "after": "Add a map selector and a symbol legend to the page, and make the selection\ndrive which map the simulation runs.\n\n- `index.html`: a `<select id=\"map-select\">` with five options (one per static\n  map, in order), and a legend of two lines — cell colors (entry / path /\n  split / exit / background) and traveler letters (C courier, M merchant,\n  P pilgrim, R refugee, T tourist), each with a color swatch.\n- `src/main.js`: read a `?map=N` query parameter (default 0, clamped to the\n  number of maps), pass it to `generateMap()`, and set the select's initial\n  value. On the select's `change` event, navigate to `?map=N`, which reloads\n  the page — a full reload is the \"restart\", resetting travelers, timers, and\n  the grid with no manual KAPLAY teardown.\n\n[chosen] reload-on-change via `?map=N`; rejected: tearing down and rebuilding\nKAPLAY objects in place (more code, more edge cases, no gain).\n\nDepends on the five static maps from `static-maps-replace-random-generator`.",
+      "before": "`index.html` is a bare shell — a `<head>` plus one\n`<script type=\"module\" src=\"src/main.js\">`. The app always renders map 0\n(`generateMap()` defaults to index 0); the only way to see maps 1–4 is to\nhand-edit the `generateMap()` argument in `src/main.js` and reload. There is\nno legend explaining the colored cells or the traveler letters.",
+      "begunAtMs": 1793208049716,
+      "citations": [],
+      "files": [
+        "index.html",
+        "src/main.js"
+      ],
+      "id": "map-selector-and-legend",
+      "status": "applied"
+    }
+  ],
+  "version": 30
+}

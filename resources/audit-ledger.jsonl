@@ -8,3 +8,6 @@
 {"at":"2026-10-17T21:24:51.592Z","atMs":1792272291592,"authorization":"apply-and-commit","branch":"main","itemIds":["traveler-classes"],"kind":"commit","sha":"fd74f784065f667331e3fe0d645654c5bd3f9fdd","stagedPaths":["src/actors.js","src/main.js","test/actors.test.js"]}
 {"applyAndCommit":true,"at":"2026-10-17T21:33:19.273Z","atMs":1792272799273,"decision":"approved","itemIds":["courier-naming"],"kind":"authorization","source":"worklist-action-command"}
 {"at":"2026-10-17T21:33:33.530Z","atMs":1792272813530,"authorization":"apply-and-commit","branch":"main","itemIds":["courier-naming"],"kind":"commit","sha":"5dcec7dd7d682d9a67746cc69e67ebefa3f49a7d","stagedPaths":["PLAN.md"]}
+{"applyAndCommit":false,"at":"2026-10-28T16:54:42.800Z","atMs":1793206482800,"decision":"approved","itemIds":["static-maps-replace-random-generator"],"kind":"authorization","source":"worklist-action-command"}
+{"applyAndCommit":false,"at":"2026-10-28T17:20:49.716Z","atMs":1793208049716,"decision":"approved","itemIds":["map-selector-and-legend"],"kind":"authorization","source":"worklist-action-command"}
+{"applyAndCommit":false,"at":"2026-10-28T17:29:42.368Z","atMs":1793208582368,"decision":"approved","itemIds":["static-maps-replace-random-generator","map-selector-and-legend"],"kind":"authorization","source":"worklist-action-command"}

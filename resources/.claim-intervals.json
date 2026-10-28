@@ -1,20 +1,21 @@
 {
   "intervals": [
     {
-      "atMs": 1792272799273,
+      "atMs": 1793209085573,
       "ids": [
-        "courier-naming"
+        "map-selector-and-legend",
+        "static-maps-replace-random-generator"
       ],
       "kind": "approved",
-      "ref": "refs/bram/claims/1792272799273",
-      "tree": "ce3fe849ffdf19a22bb9c1678a34305c7f7a6dc1"
+      "ref": "refs/bram/claims/1793209085573",
+      "tree": "6db006e3e9df0b0c83e04a438dc6f3baa6c477e4"
     },
     {
-      "atMs": 1792272813654,
+      "atMs": 1793209206738,
       "ids": [],
       "kind": "cleared",
-      "ref": "refs/bram/claims/1792272813654",
-      "tree": "16778a396481eceaf5d7785b6c511053efecc25a"
+      "ref": "refs/bram/claims/1793209206738",
+      "tree": "245f62c5cf87a714f7ee6dd351ddc3aedb22bf2b"
     }
   ],
   "version": 1

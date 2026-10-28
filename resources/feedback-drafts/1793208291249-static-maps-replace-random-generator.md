@@ -1,0 +1,1 @@
+i have ticked the static-maps-replace-random-generator task - do the work to make the maps winding

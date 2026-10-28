@@ -1,0 +1,9 @@
+{
+  "createdAtMs": 1793206059288,
+  "id": "1793206059288-turn",
+  "images": [],
+  "kind": "message",
+  "mode": "",
+  "schema": 1,
+  "text": "you are going to replace the existing random map generator with a set of five static (non-random) maps. each map will be the same XY dimensions as the existing randomly-generated maps. the random map generation code will be removed entirely once this work is finished. the first of the new maps is a simple path from the left edge of the map (entrance) to the right edge (exit). It winds a little bit, but if two path cells are not directly connected, there is at least one non-path background cell between them. The second map has two entrances on the left edge and one exit on the right, with the join occurring approximately in the middle of the map. The third map has one entrance on the left edge and one on the top; again, the join occurs roughly in the middle of the map. The fourth map has a single entrance, a split roughly one-third of the way across the map, a join at roughly the two-thirds mark, and a single exit. The fifth map has a single entrance, a split, and two exits (both on the right edge of the map). Mark entrance, path, exit, and background cells. Do *NOT* add arrows or other markers to show direction of flow. Look in ../humans to see how maps are displayed."
+}
