@@ -12,3 +12,5 @@
 {"applyAndCommit":false,"at":"2026-10-28T17:20:49.716Z","atMs":1793208049716,"decision":"approved","itemIds":["map-selector-and-legend"],"kind":"authorization","source":"worklist-action-command"}
 {"applyAndCommit":false,"at":"2026-10-28T17:29:42.368Z","atMs":1793208582368,"decision":"approved","itemIds":["static-maps-replace-random-generator","map-selector-and-legend"],"kind":"authorization","source":"worklist-action-command"}
 {"applyAndCommit":false,"at":"2026-10-29T00:12:32.281Z","atMs":1793232752281,"decision":"approved","itemIds":["plan-fixed-maps","random-split-selection","traveler-speeds","traveler-energy"],"kind":"authorization","source":"worklist-action-command"}
+{"applyAndCommit":false,"at":"2026-10-29T00:23:58.231Z","atMs":1793233438231,"decision":"direct-edit","itemIds":[],"kind":"authorization","provider":"claude","source":"bram-guard-opt-out"}
+{"applyAndCommit":false,"at":"2026-10-29T00:25:00.316Z","atMs":1793233500316,"decision":"drop","itemIds":["slow-travelers"],"kind":"authorization","source":"worklist-action-command"}

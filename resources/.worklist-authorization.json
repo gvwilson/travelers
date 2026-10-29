@@ -1,65 +1,25 @@
 {
-  "kind": "approved",
+  "kind": "drop",
   "ids": [
-    "plan-fixed-maps",
-    "random-split-selection",
-    "traveler-speeds",
-    "traveler-energy"
+    "slow-travelers"
   ],
   "items": [
     {
       "_citationsMissing": true,
-      "after": "Update those two spots: replace the \"Generation\" bullet with a \"Maps\" bullet\nlisting the five fixed (non-random) maps, and rename roadmap item 2 to\n`static-maps` with \"five fixed winding maps\" / \"cell-type rendering\".",
-      "before": "PLAN.md still describes the map as randomly generated: the \"Generation\" bullet\nunder \"Map & movement\" says \"a random generator builds a single winding path\"\nand \"Reloading the page generates a new map\", and roadmap item 2\n(`map-path-generator`) says \"random directed path\" and \"directional rendering\".",
-      "citations": [],
-      "feedback": "",
-      "files": [
-        "PLAN.md"
-      ],
-      "id": "plan-fixed-maps",
-      "status": "proposed"
-    },
-    {
-      "_citationsMissing": true,
-      "after": "When `next` holds several onward cells, pick one uniformly at random\n(`out[Math.floor(Math.random() * out.length)]`). Single-next cells are\nunchanged.",
-      "before": "`Traveler.step()` in src/actors.js returns the first onward cell (`out[0]`), so\nat a split every traveler deterministically follows the same branch.",
+      "after": "Slow every kind by roughly 2×, preserving the relative ordering:\ncourier 0.6, merchant 1.0, pilgrim 0.9, refugee 0.8, tourist 1.5 (s/cell).",
+      "before": "All traveler kinds move faster than intended: the `moveInterval` values in\nsrc/actors.js are 0.3–0.8 s/cell (courier 0.3, merchant 0.55, pilgrim 0.45,\nrefugee 0.4, tourist 0.8).",
       "citations": [],
       "feedback": "",
       "files": [
         "src/actors.js"
       ],
-      "id": "random-split-selection",
-      "status": "proposed"
-    },
-    {
-      "_citationsMissing": true,
-      "after": "Document each kind's speed in PLAN.md. No code change unless the interval\nspread is revised.",
-      "before": "The traveler kinds already carry distinct `moveInterval`s in src/actors.js\n(courier 0.3, merchant 0.55, pilgrim 0.45, refugee 0.4, tourist 0.8), but\nPLAN.md's traveler table has no speed column.",
-      "citations": [],
-      "feedback": "",
-      "files": [
-        "PLAN.md"
-      ],
-      "id": "traveler-speeds",
-      "status": "proposed"
-    },
-    {
-      "_citationsMissing": true,
-      "after": "Give energy-spending kinds (Merchant, Refugee) an energy budget; spend it per\nstep in `Traveler.step()`; slow them when low; remove them when depleted.\nTunables live in src/actors.js (the plan's central CONFIG is a later roadmap\nitem).",
-      "before": "`Traveler` stores `usesEnergy` and `pointValue` but has no `energy` field or\nspend/slow/expire logic, and the src/main.js loop doesn't handle energy.",
-      "citations": [],
-      "feedback": "",
-      "files": [
-        "src/actors.js",
-        "src/main.js"
-      ],
-      "id": "traveler-energy",
+      "id": "slow-travelers",
       "status": "proposed"
     }
   ],
-  "issuedAtMs": 1793232752278,
+  "issuedAtMs": 1793233500314,
   "source": "worklist-action-command",
-  "consumedAtMs": 1793232845498,
+  "consumedAtMs": 1793233500458,
   "interruptedAtMs": null,
   "commitToo": false
 }

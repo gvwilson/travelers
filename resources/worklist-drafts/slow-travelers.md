@@ -1,0 +1,10 @@
+# Before
+
+All traveler kinds move faster than intended: the `moveInterval` values in
+src/actors.js are 0.3–0.8 s/cell (courier 0.3, merchant 0.55, pilgrim 0.45,
+refugee 0.4, tourist 0.8).
+
+# After
+
+Slow every kind by roughly 2×, preserving the relative ordering:
+courier 0.6, merchant 1.0, pilgrim 0.9, refugee 0.8, tourist 1.5 (s/cell).

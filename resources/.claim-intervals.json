@@ -1,11 +1,20 @@
 {
   "intervals": [
     {
-      "atMs": 1793232845438,
+      "atMs": 1793233500317,
+      "ids": [
+        "slow-travelers"
+      ],
+      "kind": "drop",
+      "ref": "refs/bram/claims/1793233500317",
+      "tree": "47e221adac7dff155d1ec9f3675b11bf9f592fb2"
+    },
+    {
+      "atMs": 1793233500405,
       "ids": [],
       "kind": "cleared",
-      "ref": "refs/bram/claims/1793232845438",
-      "tree": "a930bc26d1e7c0c250f501764257b7e62322e673"
+      "ref": "refs/bram/claims/1793233500405",
+      "tree": "1a9b452a6211730a8947906b16a20546fb7582b2"
     }
   ],
   "version": 1
