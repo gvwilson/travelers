@@ -97,9 +97,9 @@ onUpdate(() => {
   for (let i = travelers.length - 1; i >= 0; i--) {
     const traveler = travelers[i];
     traveler.timer += dt();
-    if (traveler.timer < traveler.moveInterval) continue;
+    if (traveler.timer < traveler.effectiveMoveInterval) continue;
     traveler.timer = 0;
-    if (traveler.step(next)) {
+    if (traveler.step(next) && !traveler.isExpired) {
       reposition(traveler);
     } else {
       travelers.splice(i, 1);
