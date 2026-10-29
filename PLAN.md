@@ -45,13 +45,13 @@ Letter glyphs are placeholders until graphics land.
 
 ### Travelers (5)
 
-| kind | letter | uses energy | point value | notes |
-| --- | --- | --- | --- | --- |
-| Courier | `C` | no | 1 | fast (courier) |
-| Merchant | `M` | yes | 2 | carries goods: worth more, but tires |
-| Pilgrim | `P` | no | 1 | steady walker, baseline |
-| Refugee | `R` | yes | 1 | fragile: expires quickly when out of energy |
-| Tourist | `T` | no | 1 | slow, lingers |
+| kind | letter | speed (s/cell) | uses energy | point value | notes |
+| --- | --- | --- | --- | --- | --- |
+| Courier | `C` | 0.30 | no | 1 | fast |
+| Merchant | `M` | 0.55 | yes | 2 | carries goods: worth more, but tires |
+| Pilgrim | `P` | 0.45 | no | 1 | steady walker, baseline |
+| Refugee | `R` | 0.40 | yes | 1 | fragile: expires quickly when out of energy |
+| Tourist | `T` | 0.80 | no | 1 | slow, lingers |
 
 ### Towers (4, extensible)
 
@@ -93,12 +93,12 @@ station heals; Hostel handles energy, Engineer repairs, Guard fends off.
   3. every path cell reaches some `EXIT`;
   4. the path graph is acyclic;
   5. no two path cells are adjacent unless one is the next cell after the other.
-- **Generation:** a random generator builds a single winding path from one
-  `ENTRY` cell on the left edge to one `EXIT` cell on the right edge. Consecutive
-  cells connect orthogonally (edge-to-edge, never corner-to-corner). Only the
-  `ENTRY` and `EXIT` cells sit on the grid border; every other cell stays at
-  least one row/column away from it. Reloading the page generates a new map.
-  The path never branches, joins, backtracks, or runs alongside itself.
+- **Maps:** a fixed set of five non-random maps, all on the same 15×21 grid.
+  Each map is a set of directed walks from `ENTRY` cells to `EXIT` cells: a
+  single winding path; two entrances that join; a left and a top entrance that
+  join; a path that splits then rejoins; and a path that splits into two exits.
+  Cells connect orthogonally (edge-to-edge, never corner-to-corner), and no
+  two path cells are adjacent unless one is the next cell after the other.
 
 ## Placing towers
 
@@ -122,11 +122,11 @@ session, in dependency order.
    blank canvas.
    *Done when:* the page opens showing an empty grid with no console errors.
 
-2. **`map-path-generator`** — grid/cell classes (`ENTRY`, `PATH`, `SPLIT`,
-   `EXIT`, `EMPTY`, `BUILD_SITE`), random directed path, connectivity check,
-   directional rendering.
-   *Done when:* every generated map satisfies the five invariants and renders
-   with direction visible.
+2. **`static-maps`** — grid/cell classes (`ENTRY`, `PATH`, `SPLIT`,
+   `EXIT`, `EMPTY`, `BUILD_SITE`), five fixed winding maps, connectivity check,
+   cell-type rendering (no direction arrows).
+   *Done when:* each fixed map satisfies the five invariants and renders by
+   cell type.
 
 3. **`traveler-classes`** — `Traveler` base + `Pilgrim`/`Merchant`/`Refugee`/
    `Courier`/`Tourist`, spawn at entry cells, move one-way along the path
