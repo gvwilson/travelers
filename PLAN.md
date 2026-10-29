@@ -47,11 +47,11 @@ Letter glyphs are placeholders until graphics land.
 
 | kind | letter | speed (s/cell) | uses energy | point value | notes |
 | --- | --- | --- | --- | --- | --- |
-| Courier | `C` | 0.30 | no | 1 | fast |
-| Merchant | `M` | 0.55 | yes | 2 | carries goods: worth more, but tires |
-| Pilgrim | `P` | 0.45 | no | 1 | steady walker, baseline |
-| Refugee | `R` | 0.40 | yes | 1 | fragile: expires quickly when out of energy |
-| Tourist | `T` | 0.80 | no | 1 | slow, lingers |
+| Courier | `C` | 0.6 | no | 1 | fast |
+| Merchant | `M` | 1.0 | yes | 2 | carries goods: worth more, but tires |
+| Pilgrim | `P` | 0.9 | no | 1 | steady walker, baseline |
+| Refugee | `R` | 0.8 | yes | 1 | fragile: expires quickly when out of energy |
+| Tourist | `T` | 1.5 | no | 1 | slow, lingers |
 
 ### Towers (4, extensible)
 

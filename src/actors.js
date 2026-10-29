@@ -1,9 +1,9 @@
 export const TRAVELER_KINDS = Object.freeze({
-  courier: { letter: 'C', moveInterval: 0.3, usesEnergy: false, pointValue: 1, color: '#29b6f6' },
-  merchant: { letter: 'M', moveInterval: 0.55, usesEnergy: true, pointValue: 2, color: '#ffca28' },
-  pilgrim: { letter: 'P', moveInterval: 0.45, usesEnergy: false, pointValue: 1, color: '#66bb6a' },
-  refugee: { letter: 'R', moveInterval: 0.4, usesEnergy: true, pointValue: 1, color: '#ef5350' },
-  tourist: { letter: 'T', moveInterval: 0.8, usesEnergy: false, pointValue: 1, color: '#ab47bc' },
+  courier: { letter: 'C', moveInterval: 0.6, usesEnergy: false, pointValue: 1, color: '#29b6f6' },
+  merchant: { letter: 'M', moveInterval: 1.0, usesEnergy: true, pointValue: 2, color: '#ffca28' },
+  pilgrim: { letter: 'P', moveInterval: 0.9, usesEnergy: false, pointValue: 1, color: '#66bb6a' },
+  refugee: { letter: 'R', moveInterval: 0.8, usesEnergy: true, pointValue: 1, color: '#ef5350' },
+  tourist: { letter: 'T', moveInterval: 1.5, usesEnergy: false, pointValue: 1, color: '#ab47bc' },
 });
 
 export const TRAVELER_KIND_NAMES = Object.keys(TRAVELER_KINDS);
