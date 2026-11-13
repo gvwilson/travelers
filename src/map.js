@@ -175,7 +175,7 @@ function designateBuildSites(grid) {
   const sites = [];
   for (const [r, c] of candidates) {
     const farEnough = sites.every(
-      ([sr, sc]) => Math.abs(sr - r) + Math.abs(sc - c) >= 2,
+      ([sr, sc]) => Math.abs(sr - r) + Math.abs(sc - c) >= 5,
     );
     if (farEnough) sites.push([r, c]);
   }
