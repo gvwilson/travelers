@@ -1,3 +1,5 @@
+import { CONFIG } from './config.js';
+
 export const CellType = Object.freeze({
   ENTRY: 'entry',
   PATH: 'path',
@@ -7,9 +9,9 @@ export const CellType = Object.freeze({
   BUILD_SITE: 'build_site',
 });
 
-export const GRID_ROWS = 15;
-export const GRID_COLS = 21;
-export const CELL_SIZE = 32;
+export const GRID_ROWS = CONFIG.grid.rows;
+export const GRID_COLS = CONFIG.grid.cols;
+export const CELL_SIZE = CONFIG.grid.cellSize;
 
 // Five hand-authored static maps. Each definition is a set of ordered walks
 // from an entry to an exit, with entries and exits listed explicitly. A walk
@@ -141,7 +143,44 @@ function buildStaticMap(def) {
     }
   }
 
-  return { grid, next, entries: def.entries, exits: def.exits };
+  const buildSites = designateBuildSites(grid);
+  return { grid, next, entries: def.entries, exits: def.exits, buildSites };
+}
+
+// Build sites are EMPTY cells beside the path, spaced out so towers don't crowd.
+function designateBuildSites(grid) {
+  const rows = grid.length;
+  const cols = grid[0].length;
+  const isPath = (r, c) => {
+    const t = grid[r][c];
+    return (
+      t === CellType.ENTRY ||
+      t === CellType.PATH ||
+      t === CellType.SPLIT ||
+      t === CellType.EXIT
+    );
+  };
+  const candidates = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (grid[r][c] !== CellType.EMPTY) continue;
+      const besidePath = [[-1, 0], [1, 0], [0, -1], [0, 1]].some(([dr, dc]) => {
+        const nr = r + dr;
+        const nc = c + dc;
+        return nr >= 0 && nr < rows && nc >= 0 && nc < cols && isPath(nr, nc);
+      });
+      if (besidePath) candidates.push([r, c]);
+    }
+  }
+  const sites = [];
+  for (const [r, c] of candidates) {
+    const farEnough = sites.every(
+      ([sr, sc]) => Math.abs(sr - r) + Math.abs(sc - c) >= 2,
+    );
+    if (farEnough) sites.push([r, c]);
+  }
+  for (const [r, c] of sites) grid[r][c] = CellType.BUILD_SITE;
+  return sites;
 }
 
 export const MAPS = MAP_DEFS.map(buildStaticMap);
