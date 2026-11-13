@@ -1,1 +1,0 @@
-modify the paths in maps 2 through 5 so that they are also winding (like the path in map 1). The same constraints apply: if two path cells are not directly connected, there is at least one background cell between them.

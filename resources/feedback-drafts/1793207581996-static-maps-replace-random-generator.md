@@ -1,1 +1,0 @@
-then explain how I can view the maps
