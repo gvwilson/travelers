@@ -4,9 +4,10 @@ import { Traveler, TRAVELER_KIND_NAMES } from './actors.js';
 import { Tower, TOWER_KIND_NAMES } from './towers.js';
 import { Danger, DANGER_KIND_NAMES } from './dangers.js';
 import { CONFIG } from './config.js';
+import { ICONS } from './icons.js';
 
 const {
-  add, rect, pos, color, circle, outline, anchor, text, vec2,
+  add, rect, pos, color, circle, outline, anchor, vec2, polygon,
   onUpdate, dt, onClick, mousePos, onKeyPress,
 } = kaplay({
   background: '#1a1a1a',
@@ -67,8 +68,34 @@ const travelers = [];
 const towers = [];
 const dangers = [];
 
-const TRAVELER_RADIUS = CELL_SIZE / 2 - 4;
-const TRAVELER_TEXT_SIZE = CELL_SIZE / 2;
+function drawIcon(specs, x, y) {
+  const objs = [];
+  for (const s of specs) {
+    if (s.t === 'circle') {
+      const comps = [
+        circle(s.r * CELL_SIZE),
+        color(s.color),
+        pos(x + s.x * CELL_SIZE, y + s.y * CELL_SIZE),
+        anchor('center'),
+      ];
+      if (s.r >= 0.05) comps.push(outline(2, '#000000'));
+      objs.push(add(comps));
+    } else if (s.t === 'rect') {
+      const comps = [
+        rect(s.w * CELL_SIZE, s.h * CELL_SIZE),
+        color(s.color),
+        pos(x + s.x * CELL_SIZE, y + s.y * CELL_SIZE),
+        anchor('center'),
+      ];
+      if (Math.min(s.w, s.h) >= 0.09) comps.push(outline(2, '#000000'));
+      objs.push(add(comps));
+    } else if (s.t === 'poly') {
+      const pts = s.points.map(([px, py]) => vec2(x + px * CELL_SIZE, y + py * CELL_SIZE));
+      objs.push(add([polygon(pts), color(s.color), outline(2, '#000000')]));
+    }
+  }
+  return objs;
+}
 
 // ---- Helpers ---------------------------------------------------------------
 
@@ -93,21 +120,7 @@ function spawnTraveler() {
   const entry = entries[Math.floor(Math.random() * entries.length)];
   const traveler = new Traveler(kind, entry);
   const { x, y } = cellCenter(traveler.r, traveler.c);
-  traveler.sprites = [
-    add([
-      circle(TRAVELER_RADIUS),
-      color(traveler.color),
-      outline(2, '#000000'),
-      pos(x, y),
-      anchor('center'),
-    ]),
-    add([
-      text(traveler.letter, { size: TRAVELER_TEXT_SIZE }),
-      color('#ffffff'),
-      pos(x, y),
-      anchor('center'),
-    ]),
-  ];
+  traveler.sprites = drawIcon(ICONS[traveler.kind], x, y);
   traveler.timer = 0;
   travelers.push(traveler);
   spawnCount += 1;
@@ -131,21 +144,7 @@ function placeTower(kind, r, c) {
   if (towers.some((t) => t.r === r && t.c === c)) return;
   const tower = new Tower(kind, r, c);
   const { x, y } = cellCenter(r, c);
-  tower.sprites = [
-    add([
-      rect(CELL_SIZE - 6, CELL_SIZE - 6),
-      color(tower.color),
-      outline(2, '#000000'),
-      pos(x, y),
-      anchor('center'),
-    ]),
-    add([
-      text(tower.letter, { size: TRAVELER_TEXT_SIZE }),
-      color('#000000'),
-      pos(x, y),
-      anchor('center'),
-    ]),
-  ];
+  tower.sprites = drawIcon(ICONS[tower.kind], x, y);
   towers.push(tower);
   points -= def.cost;
   updateHUD();
@@ -175,33 +174,19 @@ function spawnDanger() {
   }
   const danger = new Danger(kind, r, c);
   const { x, y } = cellCenter(r, c);
-  danger.sprite = add([
-    circle(TRAVELER_RADIUS),
-    color(danger.color),
-    outline(2, '#000000'),
-    pos(x, y),
-    anchor('center'),
-  ]);
-  danger.label = add([
-    text(danger.letter, { size: TRAVELER_TEXT_SIZE }),
-    color('#ffffff'),
-    pos(x, y),
-    anchor('center'),
-  ]);
+  danger.sprites = drawIcon(ICONS[danger.kind], x, y);
   dangers.push(danger);
 }
 
 function removeDanger(i) {
   const danger = dangers[i];
-  danger.sprite.destroy();
-  danger.label.destroy();
+  for (const sprite of danger.sprites) sprite.destroy();
   dangers.splice(i, 1);
 }
 
 function repositionDanger(danger) {
   const { x, y } = cellCenter(danger.r, danger.c);
-  danger.sprite.pos = vec2(x, y);
-  danger.label.pos = vec2(x, y);
+  for (const sprite of danger.sprites) sprite.pos = vec2(x, y);
 }
 
 function stepMobileDanger(danger) {

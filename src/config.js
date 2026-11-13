@@ -1,7 +1,7 @@
 // Central tuning: every gameplay number lives here so playtesting tweaks are
 // one-line edits (PLAN.md "centralized tuning" / "endgame-tuning").
 export const CONFIG = Object.freeze({
-  grid: { rows: 15, cols: 21, cellSize: 32 },
+  grid: { rows: 15, cols: 21, cellSize: 48 },
 
   points: { start: 100 },
 
